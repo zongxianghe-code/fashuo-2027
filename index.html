@@ -3153,10 +3153,10 @@ function touch(n){D(n).ts=Date.now();save()}
 function save(){localStorage.setItem(LS,JSON.stringify(S));dirty=true;localStorage.setItem(LS+"_dirty","1");stats();clearTimeout(save.t);save.t=setTimeout(sync,4000)}
 function merge(r){if(!r||!r.days)return;for(const k in r.days){const a=S.days[k],b=r.days[k];if(!a||(b.ts||0)>(a.ts||0))S.days[k]=b}localStorage.setItem(LS,JSON.stringify(S))}
 function status(t,c){const e=$("sync");e.textContent=t;e.className="sync "+(c||"")}
-let busy=false;
+let busy=false;const tf=(u,o={})=>fetch(u,{...o,signal:AbortSignal.timeout?AbortSignal.timeout(12000):undefined});
 async function sync(force){if(busy)return;busy=true;try{
- if(force||Date.now()-lastGet>300000){status("同步中…");const g=await fetch(API,{cache:"no-store"});if(!g.ok)throw g.status;merge((await g.json()).data);lastGet=Date.now()}
- if(dirty){status("上传中…");S.updated=new Date().toISOString();const p=await fetch(API,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"fashuo2027",data:S})});if(!p.ok)throw p.status;dirty=false;localStorage.setItem(LS+"_dirty","0")}
+ if(force||Date.now()-lastGet>300000){status("同步中…");const g=await tf(API,{cache:"no-store"});if(!g.ok)throw g.status;merge((await g.json()).data);lastGet=Date.now()}
+ if(dirty){status("上传中…");S.updated=new Date().toISOString();const p=await tf(API,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"fashuo2027",data:S})});if(!p.ok)throw p.status;dirty=false;localStorage.setItem(LS+"_dirty","0")}
  status("☁️ 已同步 "+new Date().toLocaleTimeString("zh-CN",{hour12:false}),"ok");render()
 }catch(e){status(navigator.onLine?"⚠️ 云端暂不可用（"+e+"），已存本机，稍后自动重试":"📴 离线：已存本机，联网后自动同步","err")}busy=false}
 function derive(p,n){const c=D(n).c;return{done:p.blocks.filter((b,i)=>c[i]).map(b=>b.subj+"："+b.task),undone:p.blocks.filter((b,i)=>!c[i]).map(b=>b.subj+"："+b.task)}}
