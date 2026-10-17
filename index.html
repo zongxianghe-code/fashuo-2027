@@ -3142,21 +3142,21 @@ const PLAN=[
   ]
  }
 ];
-const API="https://api.restful-api.dev/objects/ff808181a09d98f701a14a42a47800e1",LS="fashuo2027_progress";
+const DBKEY="fashuo2027_2081cced6b111dab5c2e2c789021915f",READ="https://textdb.online/"+DBKEY,WRITE="https://api.textdb.online/update/",LS="fashuo2027_progress";
 let S=JSON.parse(localStorage.getItem(LS)||"null")||{v:2,days:{}};let dirty=localStorage.getItem(LS+"_dirty")==="1";let lastGet=0;
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
 function todayIdx(){const t=todayStr();let i=PLAN.findIndex(p=>p.date===t);if(i<0)i=t<PLAN[0].date?0:PLAN.length-1;return i}
 let cur=todayIdx();
-const D=n=>S.days[n]||(S.days[n]={c:[],score:0,note:"",ts:0});
-function touch(n){D(n).ts=Date.now();save()}
+const E0={c:[],score:0,note:"",ts:0};const D=n=>S.days[n]||E0;const W=n=>S.days[n]||(S.days[n]={c:[],score:0,note:"",ts:0});
+function touch(n){W(n).ts=Date.now();save()}
 function save(){localStorage.setItem(LS,JSON.stringify(S));dirty=true;localStorage.setItem(LS+"_dirty","1");stats();clearTimeout(save.t);save.t=setTimeout(sync,4000)}
 function merge(r){if(!r||!r.days)return;for(const k in r.days){const a=S.days[k],b=r.days[k];if(!a||(b.ts||0)>(a.ts||0))S.days[k]=b}localStorage.setItem(LS,JSON.stringify(S))}
 function status(t,c){const e=$("sync");e.textContent=t;e.className="sync "+(c||"")}
 let busy=false;const tf=(u,o={})=>fetch(u,{...o,signal:AbortSignal.timeout?AbortSignal.timeout(12000):undefined});
 async function sync(force){if(busy)return;busy=true;try{
- if(force||Date.now()-lastGet>300000){status("同步中…");const g=await tf(API,{cache:"no-store"});if(!g.ok)throw g.status;merge((await g.json()).data);lastGet=Date.now()}
- if(dirty){status("上传中…");S.updated=new Date().toISOString();const p=await tf(API,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"fashuo2027",data:S})});if(!p.ok)throw p.status;dirty=false;localStorage.setItem(LS+"_dirty","0")}
+ if(force||Date.now()-lastGet>300000){status("同步中…");const g=await tf(READ+"?t="+Date.now(),{cache:"no-store"});if(!g.ok)throw g.status;const txt=await g.text();if(txt.trim())merge(JSON.parse(txt));lastGet=Date.now()}
+ if(dirty){status("上传中…");S.updated=new Date().toISOString();const p=await tf(WRITE,{method:"POST",body:new URLSearchParams({key:DBKEY,value:JSON.stringify(S)})});const j=await p.json();if(j.status!==1)throw (j.error||"写入失败");dirty=false;localStorage.setItem(LS+"_dirty","0")}
  status("☁️ 已同步 "+new Date().toLocaleTimeString("zh-CN",{hour12:false}),"ok");render()
 }catch(e){status(navigator.onLine?"⚠️ 云端暂不可用（"+e+"），已存本机，稍后自动重试":"📴 离线：已存本机，联网后自动同步","err")}busy=false}
 function derive(p,n){const c=D(n).c;return{done:p.blocks.filter((b,i)=>c[i]).map(b=>b.subj+"："+b.task),undone:p.blocks.filter((b,i)=>!c[i]).map(b=>b.subj+"："+b.task)}}
@@ -3173,9 +3173,9 @@ function render(){const p=PLAN[cur],d=D(p.day);$("sel").value=cur;
  <div class=ci><b>今日打卡</b><div class=small>自评分（1-10）</div><div class=scores>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-s=${n} class="${d.score==n?"on":""}">${n}</button>`).join("")}</div>
  <div class=small>卡点与调整</div><textarea id=note placeholder="今天卡在哪里？明天怎么调？">${esc(d.note||"")}</textarea>
  <p class=small>✅ 完成 ${dv.done.length} 项｜⬜ 未完成 ${dv.undone.length} 项（自动统计）</p></div></div>`;
- $("view").querySelectorAll("input[type=checkbox]").forEach(x=>x.onchange=()=>{D(p.day).c[x.dataset.i]=x.checked?1:0;touch(p.day);render()});
- $("view").querySelectorAll("[data-s]").forEach(x=>x.onclick=()=>{D(p.day).score=+x.dataset.s;touch(p.day);render()});
- $("note").oninput=e=>{D(p.day).note=e.target.value;D(p.day).ts=Date.now();localStorage.setItem(LS,JSON.stringify(S));clearTimeout(render.t);render.t=setTimeout(save,800)};stats()}
+ $("view").querySelectorAll("input[type=checkbox]").forEach(x=>x.onchange=()=>{W(p.day).c[x.dataset.i]=x.checked?1:0;touch(p.day);render()});
+ $("view").querySelectorAll("[data-s]").forEach(x=>x.onclick=()=>{W(p.day).score=+x.dataset.s;touch(p.day);render()});
+ $("note").oninput=e=>{W(p.day).note=e.target.value;W(p.day).ts=Date.now();localStorage.setItem(LS,JSON.stringify(S));clearTimeout(render.t);render.t=setTimeout(save,800)};stats()}
 function go(i){cur=Math.max(0,Math.min(PLAN.length-1,i));render();scrollTo(0,0)}
 $("sel").innerHTML=PLAN.map((p,i)=>`<option value=${i}>第${p.day}天 ${p.date.slice(5)} ${p.week} · ${esc(p.subj)}</option>`).join("");
 $("sel").onchange=e=>go(+e.target.value);$("prev").onclick=$("prev2").onclick=()=>go(cur-1);$("next").onclick=$("next2").onclick=()=>go(cur+1);$("tod").onclick=()=>go(todayIdx());
