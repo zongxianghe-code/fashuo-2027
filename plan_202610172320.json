@@ -1,75 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="法硕打卡"><meta name="theme-color" content="#1d4ed8">
-<link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.json">
-<title>2027 法硕（非法学）63 天逐日任务清单</title>
-<style>
-:root{--bg:#f5f6fa;--card:#fff;--line:#e6e8ef;--ink:#1a1d29;--ink2:#5b6173;--ink3:#8b90a3;--accent:#1d4ed8;--ok:#059669;--warn:#b45309}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC",system-ui,sans-serif;font-size:16px;line-height:1.55;padding-bottom:env(safe-area-inset-bottom)}
-.wrap{max-width:720px;margin:0 auto;padding:0 14px}
-header{background:linear-gradient(135deg,#1e3a8a,#1d4ed8);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 0 14px}
-h1{margin:0;font-size:19px}.sub{font-size:12.5px;opacity:.85}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
-.stat{background:rgba(255,255,255,.15);border-radius:10px;padding:6px 8px;text-align:center}.stat b{display:block;font-size:19px}.stat span{font-size:11px;opacity:.85}
-.bar{position:sticky;top:0;z-index:9;background:#fff;border-bottom:1px solid var(--line);padding:8px 0}
-.bar .wrap{display:flex;gap:6px;align-items:center}
-.btn{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:10px;padding:10px 12px;font-size:15px;min-height:44px}
-.btn.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
-select.btn{flex:1;min-width:0}
-.sync{font-size:12px;padding:6px 0;color:var(--ink3)}.sync.err{color:var(--warn)}.sync.ok{color:var(--ok)}
-.day{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
-.dh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.dnum{color:#fff;border-radius:8px;padding:2px 8px;font-size:13px}
-.focus{font-weight:600;margin:8px 0 4px;font-size:17px}.memo{font-size:13.5px;color:var(--ink2);background:#fffbeb;border-left:3px solid var(--warn);padding:7px 10px;border-radius:0 8px 8px 0;margin:8px 0}
-label.blk{display:flex;gap:12px;align-items:flex-start;padding:12px 4px;border-top:1px solid var(--line);cursor:pointer}
-label.blk input{width:26px;height:26px;flex:none;margin-top:2px;accent-color:var(--ok)}
-label.blk.done .tx{color:var(--ink3);text-decoration:line-through}
-.tm{font-size:12.5px;color:var(--ink3)}.sj{font-size:12px;background:#eef2ff;color:#25306e;border-radius:6px;padding:1px 6px;margin-left:6px}
-.ci{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
-.scores{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:6px 0 10px}
-.scores button{min-height:44px;font-size:16px;border:1px solid var(--line);background:#fff;border-radius:10px}
-.scores button.on{background:var(--accent);color:#fff}
-textarea{width:100%;min-height:80px;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:inherit}
-.small{font-size:13px;color:var(--ink2)}.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}summary{font-weight:600;color:var(--accent)}
-table{border-collapse:collapse;font-size:12.5px;width:100%}td,th{border:1px solid var(--line);padding:4px 6px;vertical-align:top}
-.nav{display:flex;gap:8px}.nav .btn{flex:1}
-</style></head><body>
-<header><div class="wrap"><h1>2027 法硕（非法学）· 逐日打卡 <small style="font-size:12px;background:#f59e0b;border-radius:6px;padding:1px 6px">预览 202610172310</small></h1>
-<div class="sub">目标总分 330+｜单科底线：政治 40 / 英语一 40 / 398、498 各 60｜2026-10-18 → 2026-12-20<br>📌 报名截止 10-24 22:00｜留意报名材料审核｜准考证约 12-09 起打印｜初试 12-19 / 12-20</div>
-<div class="stats" id="stats"></div></div></header>
-<div class="bar"><div class="wrap"><button class="btn" id="prev">‹</button><select class="btn" id="sel"></select><button class="btn" id="next">›</button><button class="btn pri" id="tod">今天</button></div></div>
-<div class="wrap"><div class="sync" id="sync">…</div><div id="view"></div>
-<div class="nav"><button class="btn" id="prev2">‹ 前一天</button><button class="btn" id="next2">后一天 ›</button></div>
-<details><summary>备份 / 导入导出 / 同步</summary>
-<div class="row"><button class="btn" id="exJ">导出 JSON</button><button class="btn" id="exM">导出 Markdown 表</button><button class="btn" id="im">导入 JSON</button><button class="btn" id="pull">立即同步</button></div>
-<input type="file" id="file" accept=".json,application/json" hidden>
-<textarea id="out" readonly placeholder="导出内容会显示在这里，可长按全选复制"></textarea>
-<p class="small">勾选和打卡先存本机，再自动同步到云端（离线时排队，联网后自动重试）。换手机/电脑打开同一网址即可看到同样的进度。</p></details>
-<details><summary>每日作息底座</summary><div class="basetable">
-<table>
-<tr><th>时段</th><th>工作日（周一至周五 · 约 4.7 小时）</th><th>时段</th><th>周末（约 10.8 小时）</th></tr>
-<tr><td>07:00</td><td>起床洗漱</td><td>07:30</td><td>起床（比工作日晚起 30 分钟）</td></tr>
-<tr><td>07:30-08:30</td><td><b>通勤 → 学习 45 分钟</b>（单词/音频）</td><td>08:00-08:30</td><td>早餐 + 单词快刷</td></tr>
-<tr><td>08:30-12:00</td><td>上班</td><td>08:30-12:15</td><td><b>大块 1 + 大块 2</b>（中间休息 15 分钟）</td></tr>
-<tr><td>12:00-12:45</td><td>午餐</td><td>12:15-13:30</td><td>午餐 + <b>午睡 30 分钟</b></td></tr>
-<tr><td>12:45-13:10</td><td><b>午休档 25 分钟</b>（App 刷选择题）</td><td>13:30-17:45</td><td><b>大块 3 + 大块 4</b>（英语 / 政治）</td></tr>
-<tr><td>13:10-13:30</td><td>闭目休息，不得省</td><td>17:45-19:00</td><td>晚餐 + 走动</td></tr>
-<tr><td>13:30-17:30</td><td>上班</td><td>19:00-20:30</td><td><b>主观题手写</b></td></tr>
-<tr><td>17:30-18:30</td><td><b>通勤 → 音频回放 20 分钟</b></td><td>20:45-21:45</td><td><b>背诵 + 合书默写</b></td></tr>
-<tr><td>18:30-19:30</td><td>晚餐 + 家务（不含学习）</td><td>21:45-22:00</td><td>填写当日完成/卡点</td></tr>
-<tr><td>19:30-22:30</td><td><b>两大块 + 小块</b>（21:00 休息 15 分钟）</td><td>23:00</td><td>睡（保证 8 小时）</td></tr>
-<tr><td>22:30-22:50</td><td>框架默写 + 填写当日完成/卡点</td><td></td><td></td></tr>
-<tr><td><b>23:00</b></td><td><b>睡（7:00 起 = 8 小时，不商量）</b></td><td></td><td></td></tr>
-</table>
-<p class="note">周五晚上的第二大块固定换成「本周错题回炉 + 周复盘」；11-01、11-15 晚上为缓冲夜，模考后一天留 1 个缓冲块，不做新进度 —— 这是唯一留给你喘气的口子。<br>
-满负荷上限：工作日 4.7h、周末 10.8h，全程约 392 小时。<b>实际执行按七折算（约 275 小时）也够跑完全程</b>，别为了凑表格把自己熬垮。</p>
-</div></details>
-</div>
-<script>
-const PLAN=[
+[
  {
   "day": 1,
   "date": "2026-10-18",
@@ -79,7 +8,7 @@ const PLAN=[
   "color": "#1d4ed8",
   "focus": "刑法① 绪论：刑法概述、基本原则、效力范围",
   "subj": "刑法",
-  "memo": "昨晚已背 80 词 + 读完绪论，今天不重读，直接默写框架。今晚第一件事：把「犯罪构成四要件」框架默写一遍。法硕用四要件，别写成三阶层",
+  "memo": "昨晚已背 80 词 + 读完绪论，今天不重读，直接默写框架。今晚第一件事：把「犯罪构成四要件」框架默写一遍。法硕用四要件，别写成三阶层。专业课主教材：众合《精讲一本通》+ 配套公开课，练题用《真题解读》+ 刷题册，背诵用《背诵一本通》，主观题方法用《写作一本通》",
   "minutes": 650,
   "blocks": [
    {
@@ -90,17 +19,17 @@ const PLAN=[
    {
     "t": "08:30-09:30",
     "subj": "刑法",
-    "task": "绪论快速复习 + 合书默写框架（昨晚已读完绪论，1 小时）"
+    "task": "《精讲一本通·刑法学》第1章 刑法论 快速复习 + 合书默写框架（昨晚已读完绪论，1 小时）"
    },
    {
     "t": "09:40-10:40",
     "subj": "刑法",
-    "task": "预习：《考试分析》2027 犯罪构成概述 + 犯罪客体（给第 2 天减压）"
+    "task": "预习：《精讲一本通·刑法学》第2-3章 犯罪概念、犯罪构成（给第 2 天减压）"
    },
    {
     "t": "10:45-12:15",
     "subj": "刑法",
-    "task": "合书默写框架 + 自测绪论约 25 题（竹马 App 或自备《章节真题》）｜整理今日框架笔记"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -110,7 +39,7 @@ const PLAN=[
    {
     "t": "15:05-15:40",
     "subj": "刑法",
-    "task": "刑法加量：本周刑法划线考点合书默写 + 错题回看"
+    "task": "刑法加量：《背诵一本通·刑法学》本周考点合书默写 + 错题回看"
    },
    {
     "t": "15:45-17:45",
@@ -125,7 +54,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -165,12 +94,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·犯罪构成编（约 20 页）｜可选视频：车润海第 3-4 讲"
+    "task": "《精讲一本通·刑法学》第2-5章 犯罪概念、犯罪构成、犯罪客体、犯罪客观方面 + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "刑法",
-    "task": "合书默写框架 + 自测犯罪构成部分约 30 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -210,12 +139,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·犯罪主体与主观方面（约 20 页）｜可选视频：车润海第 5-6 讲"
+    "task": "《精讲一本通·刑法学》第6-7章 犯罪主体、犯罪主观方面（含认识错误） + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "刑法",
-    "task": "合书默写框架 + 自测责任年龄、故意过失约 30 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -255,12 +184,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·正当行为（约 12 页）｜可选视频：车润海第 7-8 讲"
+    "task": "《精讲一本通·刑法学》第8章 正当化事由（正当防卫、紧急避险） + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "刑法",
-    "task": "合书默写框架 + 自测正当防卫案情题约 25 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -300,12 +229,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·停止形态与共犯（约 22 页）｜可选视频：车润海第 9-11 讲"
+    "task": "《精讲一本通·刑法学》第9-10章 犯罪形态、共同犯罪 + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "刑法",
-    "task": "合书默写框架 + 自测中止/未遂/共犯约 35 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -345,7 +274,7 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·罪数与刑事责任（约 14 页）｜可选视频：车润海第 12 讲"
+    "task": "《精讲一本通·刑法学》第11-12章 罪数、刑事责任 + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
@@ -380,12 +309,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·刑罚论（约 25 页）｜可选视频：车润海第 13-15 讲"
+    "task": "《精讲一本通·刑法学》第13-14章 刑罚、量刑（累犯/自首/立功/数罪并罚/缓刑） + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "刑法",
-    "task": "合书默写框架 + 自测刑罚裁量约 35 题（竹马 App 或自备《章节真题》）｜整理今日框架笔记"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -395,7 +324,7 @@ const PLAN=[
    {
     "t": "15:05-15:40",
     "subj": "刑法",
-    "task": "刑法加量：本周刑法划线考点合书默写 + 错题回看"
+    "task": "刑法加量：《背诵一本通·刑法学》本周考点合书默写 + 错题回看"
    },
    {
     "t": "15:45-17:45",
@@ -410,7 +339,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -440,12 +369,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·刑罚执行与消灭（约 12 页）｜可选视频：车润海第 16 讲"
+    "task": "《精讲一本通·刑法学》第15章 刑罚执行（减刑、假释）+ 刑罚消灭（时效、赦免） + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "刑法",
-    "task": "刑罚论（第 7-8 天）合书默写 + 自测约 30 题（竹马 App 或自备《章节真题》）"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -455,7 +384,7 @@ const PLAN=[
    {
     "t": "15:05-15:40",
     "subj": "刑法",
-    "task": "刑法加量：本周刑法划线考点合书默写 + 错题回看"
+    "task": "刑法加量：《背诵一本通·刑法学》本周考点合书默写 + 错题回看"
    },
    {
     "t": "15:45-17:45",
@@ -470,7 +399,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -510,12 +439,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "刑法",
-    "task": "《考试分析》2027 刑法学·各论概述 + 重点罪名（约 25 页）｜可选视频：车润海第 17 讲"
+    "task": "《精讲一本通·刑法学》分则编：各论概述 + 侵犯人身权利罪（第21章）、财产犯罪（第22章）+ 公共安全、贪污贿赂、渎职罪重点罪名 + 配套公开课（车润海，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "刑法",
-    "task": "合书默写本章框架 + 自测约 30 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·刑法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -554,12 +483,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·总论（一）（约 20 页）｜可选视频：岳业鹏第 1-3 讲"
+    "task": "《精讲一本通·民法学》第01编 第01-03章 民法概述、民事法律关系、民事主体（自然人） + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "民法",
-    "task": "合书默写本章框架 + 自测约 25 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -598,12 +527,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·总论（二）（约 22 页）｜可选视频：岳业鹏第 4-6 讲"
+    "task": "《精讲一本通·民法学》第01编 第04-06章 法人、非法人组织、民事法律行为 + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "民法",
-    "task": "合书默写本章框架 + 自测约 30 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -642,12 +571,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·代理与时效（约 15 页）｜可选视频：岳业鹏第 7-8 讲"
+    "task": "《精讲一本通·民法学》第01编 第07-08章 代理、诉讼时效与期间 + 第02编 人格权 + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "民法",
-    "task": "合书默写本章框架 + 自测约 25 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -686,7 +615,7 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·物权（一）（约 20 页）｜可选视频：岳业鹏第 9-11 讲"
+    "task": "《精讲一本通·民法学》第03编 物权：物权通则、所有权（共有、相邻关系） + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
@@ -720,12 +649,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·物权（二）+ 知识产权（约 25 页）｜可选视频：岳业鹏第 12-14 讲"
+    "task": "《精讲一本通·民法学》第03编 用益物权、担保物权、占有 + 第04编 知识产权 + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "民法",
-    "task": "合书默写框架 + 自测物权约 30 题（竹马 App 或自备《章节真题》）"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -735,7 +664,7 @@ const PLAN=[
    {
     "t": "15:05-15:40",
     "subj": "民法",
-    "task": "民法加量：本周民法划线考点合书默写 + 错题回看"
+    "task": "民法加量：《背诵一本通·民法学》本周考点合书默写 + 错题回看"
    },
    {
     "t": "15:45-17:45",
@@ -750,7 +679,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -779,12 +708,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·债总 + 合同通则（约 25 页）｜可选视频：岳业鹏第 15-16 讲"
+    "task": "《精讲一本通·民法学》第05编 债与合同：债的一般原理、合同通则、违约责任 + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "民法",
-    "task": "合书默写框架 + 自测合同通则约 30 题（竹马 App 或自备《章节真题》）"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -794,7 +723,7 @@ const PLAN=[
    {
     "t": "15:05-15:40",
     "subj": "民法",
-    "task": "民法加量：本周民法划线考点合书默写 + 错题回看"
+    "task": "民法加量：《背诵一本通·民法学》本周考点合书默写 + 错题回看"
    },
    {
     "t": "15:45-17:45",
@@ -844,12 +773,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·典型合同（约 20 页）｜可选视频：岳业鹏第 17 讲"
+    "task": "《精讲一本通·民法学》第05编 典型合同 + 准合同（无因管理、不当得利） + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "民法",
-    "task": "合书默写本章框架 + 自测约 30 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -888,12 +817,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "民法",
-    "task": "《考试分析》2027 民法学·侵权 + 婚姻家庭继承（约 25 页）｜可选视频：岳业鹏第 18-19 讲"
+    "task": "《精讲一本通·民法学》第07编 侵权责任 + 第06编 婚姻家庭与继承 + 配套公开课（岳业鹏，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "民法",
-    "task": "合书默写本章框架 + 自测约 30 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·民法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -932,12 +861,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "法理学",
-    "task": "《考试分析》2027 法理学·导论 + 法的作用（约 24 页）｜可选视频：马峰第 1-3 讲"
+    "task": "《精讲一本通·法理学》绪论、法的特征与本质、法的起源与演进、法的作用 + 配套公开课（杜洪波，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "法理学",
-    "task": "合书默写本章框架 + 自测约 25 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·法理学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -976,12 +905,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "法理学",
-    "task": "《考试分析》2027 法理学·价值论 + 本体论（约 30 页）｜可选视频：马峰第 4-7 讲"
+    "task": "《精讲一本通·法理学》法的价值、法律渊源与效力、法律体系、法的要素 + 配套公开课（杜洪波，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "法理学",
-    "task": "合书默写本章框架 + 自测约 30 题（题源：竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·法理学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -1020,7 +949,7 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "法理学",
-    "task": "《考试分析》2027 法理学·运行论（约 22 页）｜可选视频：马峰第 8-10 讲"
+    "task": "《精讲一本通·法理学》法的运行：立法、法的实施、法律监督、法律方法 + 配套公开课（杜洪波，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
@@ -1054,12 +983,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "法理学",
-    "task": "《考试分析》2027 法理学·余下各章（约 22 页）｜可选视频：马峰第 11-13 讲"
+    "task": "《精讲一本通·法理学》法律关系、法律责任、法治、法与社会 + 配套公开课（杜洪波，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "法理学",
-    "task": "合书默写法理四天框架 + 自测约 25 题（竹马 App 或自备《章节真题》）"
+    "task": "《真题解读·法理学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -1079,12 +1008,12 @@ const PLAN=[
    {
     "t": "19:00-20:45",
     "subj": "宪法学",
-    "task": "《考试分析》2027 宪法学·基本理论（约 18 页）｜可选视频：马峰宪法第 1-3 讲"
+    "task": "《精讲一本通·宪法学》宪法的基本理论 + 配套公开课（马峰，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "20:55-21:45",
     "subj": "宪法学",
-    "task": "宪法基本理论合书默写 + 自测约 15 题"
+    "task": "《真题解读·宪法学》宪法基本理论真题 + 合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -1113,12 +1042,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "宪法学",
-    "task": "《考试分析》2027 宪法学·国家制度（约 25 页）｜可选视频：马峰第 4-6 讲"
+    "task": "《精讲一本通·宪法学》我国国家制度（国家性质、政权组织形式、选举、政党、国家结构、特别行政区） + 配套公开课（马峰，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "宪法学",
-    "task": "合书默写框架 + 自测国家制度约 30 题（竹马 App 或自备《章节真题》）"
+    "task": "《真题解读·宪法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -1143,7 +1072,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -1182,12 +1111,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "宪法学",
-    "task": "《考试分析》2027 宪法学·基本权利（约 20 页）｜可选视频：马峰第 7-8 讲"
+    "task": "《精讲一本通·宪法学》公民的基本权利与义务 + 配套公开课（马峰，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "宪法学",
-    "task": "合书默写框架 + 自测公民权利约 25 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·宪法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -1226,12 +1155,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "宪法学",
-    "task": "《考试分析》2027 宪法学·国家机构与实施（约 25 页）｜可选视频：马峰第 9-11 讲"
+    "task": "《精讲一本通·宪法学》国家机构 + 宪法实施与监督 + 配套公开课（马峰，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "宪法学",
-    "task": "合书默写框架 + 自测国家机构约 30 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·宪法学》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -1270,12 +1199,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "法制史",
-    "task": "《考试分析》2027 中国法制史·上古至春秋战国（约 18 页）｜可选视频：龚成思《精讲一本通·法制史》第 1-3 讲"
+    "task": "《精讲一本通·法制史》绪论 + 奴隶制法律制度（夏商西周）+ 春秋战国 + 配套公开课（龚成思，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "法制史",
-    "task": "合书默写框架 + 自测先秦部分约 20 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·法制史》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -1314,12 +1243,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "法制史",
-    "task": "《考试分析》2027 中国法制史·秦汉（约 20 页）｜可选视频：龚成思第 4-6 讲"
+    "task": "《精讲一本通·法制史》封建制前期：秦、汉 + 配套公开课（龚成思，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
     "subj": "法制史",
-    "task": "合书默写框架 + 自测秦汉部分约 25 题（竹马 App 或自备《章节真题》）｜错题抄进错题本"
+    "task": "《真题解读·法制史》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "22:30-22:50",
@@ -1358,7 +1287,7 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "法制史",
-    "task": "《考试分析》2027 中国法制史·魏晋至唐（约 30 页）｜可选视频：龚成思第 7-11 讲"
+    "task": "《精讲一本通·法制史》封建制前期至中期：三国两晋南北朝、隋、唐 + 配套公开课（龚成思，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "21:15-22:30",
@@ -1392,12 +1321,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "法制史",
-    "task": "《考试分析》2027 中国法制史·宋至清（约 30 页）｜可选视频：龚成思第 12-16 讲"
+    "task": "《精讲一本通·法制史》封建制中后期：宋、元、明、清 + 配套公开课（龚成思，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "法制史",
-    "task": "合书默写框架 + 自测宋明清部分约 30 题（竹马 App 或自备《章节真题》）｜整理今日框架笔记"
+    "task": "《真题解读·法制史》本章真题 + 刷题册对应练习，合书默写本章框架｜错题抄进错题本"
    },
    {
     "t": "13:30-15:00",
@@ -1422,7 +1351,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -1451,12 +1380,12 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "全科",
-    "task": "《考试分析》2027 中国法制史·近代部分（约 22 页）｜可选视频：龚成思第 17-19 讲"
+    "task": "《精讲一本通·法制史》清末、中华民国 + 革命根据地法律制度 + 配套公开课（龚成思，众合在线/竹马 App/B站免费）｜对照《考试分析》2027 考点"
    },
    {
     "t": "10:45-12:15",
     "subj": "全科",
-    "task": "2022 年 398 + 498 客观题部分掐时（各 45 分钟，测分不计较；法硕真题需自备）｜整理今日框架笔记"
+    "task": "摸底：从《真题解读》五科各抽 2022 年标注的客观题（约 45+45 分钟掐时，测分不计较）｜整理今日框架笔记"
    },
    {
     "t": "13:30-15:00",
@@ -1515,12 +1444,12 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "刑法",
-    "task": "《考试分析》刑法划线考点 1-20 + 《考试分析》错题标记｜可选视频：车润海强化/主观题课 3 讲"
+    "task": "《背诵一本通·刑法学》考点 1-20 + 《精讲一本通》错题标记｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
     "subj": "刑法",
-    "task": "分则案例 3 道 + 法条分析 1 道（法硕真题需自备），手写掐 20 分钟/道｜错题抄进错题本"
+    "task": "分则案例 3 道 + 法条分析 1 道（《真题解读》主观题），手写掐 20 分钟/道｜错题抄进错题本"
    },
    {
     "t": "21:55-22:30",
@@ -1564,7 +1493,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "刑法",
-    "task": "《考试分析》刑法划线考点 21-45｜可选视频：车润海主观题课 3 讲"
+    "task": "《背诵一本通·刑法学》考点 21-45｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -1613,7 +1542,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "刑法",
-    "task": "《考试分析》刑法划线考点 46-70｜可选视频：车润海主观题课 2 讲"
+    "task": "《背诵一本通·刑法学》考点 46-70｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -1662,7 +1591,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "民法",
-    "task": "《考试分析》民法划线考点 1-20｜可选视频：岳业鹏主观题课 2 讲"
+    "task": "《背诵一本通·民法学》考点 1-20｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -1711,7 +1640,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "民法",
-    "task": "《考试分析》民法划线考点 21-45｜可选视频：岳业鹏主观题课 2 讲"
+    "task": "《背诵一本通·民法学》考点 21-45｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -1750,7 +1679,7 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "民法",
-    "task": "《考试分析》民法划线考点 46-70｜可选视频：岳业鹏主观题课 2 讲"
+    "task": "《背诵一本通·民法学》考点 46-70｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "10:45-12:15",
@@ -1780,7 +1709,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -1809,7 +1738,7 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "法理学",
-    "task": "《考试分析》2027 法理学划线考点 1-25｜可选视频：马峰主观题技巧 2 讲"
+    "task": "《背诵一本通·法理学》考点 1-25｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "10:45-12:15",
@@ -1839,7 +1768,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -1878,7 +1807,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "法理学",
-    "task": "《考试分析》2027 法理学划线考点 26-50｜可选视频：马峰主观题技巧 2 讲"
+    "task": "《背诵一本通·法理学》考点 26-50｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -1927,7 +1856,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "宪法学",
-    "task": "《考试分析》2027 宪法学划线考点 1-20｜可选视频：马峰主观题技巧 2 讲"
+    "task": "《背诵一本通·宪法学》考点 1-20｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -1976,7 +1905,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "宪法学",
-    "task": "《考试分析》2027 宪法学划线考点 21-40｜可选视频：马峰主观题技巧 2 讲"
+    "task": "《背诵一本通·宪法学》考点 21-40｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -2025,7 +1954,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "法制史",
-    "task": "《考试分析》法制史划线考点 1-20 + 朝代史四栏表｜可选视频：龚成思主观题课 2 讲"
+    "task": "《背诵一本通·法制史》考点 1-20 + 朝代史四栏表｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -2074,7 +2003,7 @@ const PLAN=[
    {
     "t": "19:30-20:40",
     "subj": "法制史",
-    "task": "《考试分析》法制史划线考点 21-40｜可选视频：龚成思主观题课 2 讲"
+    "task": "《背诵一本通·法制史》考点 21-40｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "20:50-21:50",
@@ -2113,7 +2042,7 @@ const PLAN=[
    {
     "t": "08:30-10:30",
     "subj": "法制史",
-    "task": "《考试分析》法制史划线考点 41-60｜可选视频：龚成思主观题课 2 讲"
+    "task": "《背诵一本通·法制史》考点 41-60｜《写作一本通》本科答题方法 + 配套公开课"
    },
    {
     "t": "10:45-12:15",
@@ -2143,7 +2072,7 @@ const PLAN=[
    {
     "t": "20:45-21:45",
     "subj": "背诵",
-    "task": "当日科目《考试分析》划线考点合书默写"
+    "task": "当日科目《背诵一本通》考点合书默写"
    },
    {
     "t": "21:45-22:00",
@@ -2159,7 +2088,7 @@ const PLAN=[
   "weekend": true,
   "phase": "真题实战",
   "color": "#7c3aed",
-  "focus": "真题实战①：2021 年全套 398 + 498（周末全真模考）",
+  "focus": "模考①：众合《冲刺卷》第 1 套 398 + 498（周末全真模考）",
   "subj": "全科",
   "memo": "上下午两场都按真实考试时间掐表，中途不翻书。记下两科分数，这是你的第一轮基线分；目标 200 分以上",
   "minutes": 775,
@@ -2172,7 +2101,7 @@ const PLAN=[
    {
     "t": "08:30-11:30",
     "subj": "398",
-    "task": "2021 年真题全卷，掐 3 小时，不许中途翻书"
+    "task": "众合《冲刺卷》第 1 套 398 卷，掐 3 小时，不许中途翻书"
    },
    {
     "t": "11:30-13:30",
@@ -2182,12 +2111,12 @@ const PLAN=[
    {
     "t": "14:00-17:00",
     "subj": "498",
-    "task": "2021 年真题全卷，掐 3 小时"
+    "task": "众合《冲刺卷》第 1 套 498 卷，掐 3 小时"
    },
    {
     "t": "17:00-18:30",
     "subj": "订正",
-    "task": "两科一起阅卷，每个丢分点标出《考试分析》对应章节"
+    "task": "两科一起阅卷，每个丢分点标出《精讲一本通》对应章节"
    },
    {
     "t": "19:30-21:00",
@@ -2197,7 +2126,7 @@ const PLAN=[
    {
     "t": "21:15-22:00",
     "subj": "背诵",
-    "task": "《考试分析》划线考点今日涉及的考点合书默写 5 道"
+    "task": "《背诵一本通》今日涉及的考点合书默写 5 道"
    },
    {
     "t": "22:00-22:15",
@@ -2236,12 +2165,12 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "398",
-    "task": "重做 2021 卷 398 错题，写出每题的正确答题要点并与自己的答案比对"
+    "task": "重做 冲刺卷第 1 套 398 错题，写出每题的正确答题要点并与自己的答案比对"
    },
    {
     "t": "21:15-22:30",
     "subj": "缓冲",
-    "task": "缓冲：补落下的块；没有欠账就重做 2021 卷 498 错题 + 客观题逐项复盘"
+    "task": "缓冲：补落下的块；没有欠账就重做 冲刺卷第 1 套 498 错题 + 客观题逐项复盘"
    },
    {
     "t": "22:30-22:50",
@@ -2324,17 +2253,17 @@ const PLAN=[
    {
     "t": "19:30-20:30",
     "subj": "刑法",
-    "task": "刑法：简答 2 道（各 12 分钟）+ 法条分析 1 道 + 案例分析 1 道（20 分钟），手写"
+    "task": "刑法：简答 2 道（各 12 分钟）+ 法条分析 1 道 + 案例分析 1 道（20 分钟），手写（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "20:45-21:35",
     "subj": "民法",
-    "task": "民法：简答 2 道（各 12 分钟）+ 法条分析 1 道 + 案例分析 1 道（20 分钟），手写"
+    "task": "民法：简答 2 道（各 12 分钟）+ 法条分析 1 道 + 案例分析 1 道（20 分钟），手写（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "21:45-22:30",
     "subj": "订正",
-    "task": "订正今天的 8 道手写作答，按《考试分析》原文校对自己的用语"
+    "task": "订正今天的 8 道手写作答，按《精讲一本通》原文校对自己的用语"
    },
    {
     "t": "22:30-22:50",
@@ -2373,17 +2302,17 @@ const PLAN=[
    {
     "t": "19:30-20:30",
     "subj": "法理学",
-    "task": "法理学：简答 2 道 + 论述 1 道（论述掐 25 分钟），手写"
+    "task": "法理学：简答 2 道 + 论述 1 道（论述掐 25 分钟），手写（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "20:45-21:35",
     "subj": "宪法学",
-    "task": "宪法学：简答 2 道 + 宪法条文原文默写（第 33-51 条）"
+    "task": "宪法学：简答 2 道 + 宪法条文原文默写（第 33-51 条）（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "21:45-22:30",
     "subj": "法制史",
-    "task": "法制史：简答 2 道（各朝代制度对比方向），手写"
+    "task": "法制史：简答 2 道（各朝代制度对比方向），手写（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "22:30-22:50",
@@ -2456,7 +2385,7 @@ const PLAN=[
    {
     "t": "08:30-11:30",
     "subj": "398",
-    "task": "2025 年真题全卷，掐 3 小时（法硕真题需自备）"
+    "task": "2025 年真题全卷，掐 3 小时（《真题解读》主观题）（年份整卷需自备；没买就用众合《冲刺卷》第 2 套）"
    },
    {
     "t": "11:30-13:30",
@@ -2466,7 +2395,7 @@ const PLAN=[
    {
     "t": "14:00-17:00",
     "subj": "498",
-    "task": "2025 年真题全卷，掐 3 小时"
+    "task": "2025 年真题全卷，掐 3 小时（年份整卷需自备；没买就用众合《冲刺卷》第 2 套）"
    },
    {
     "t": "17:00-18:30",
@@ -2574,12 +2503,12 @@ const PLAN=[
    {
     "t": "19:30-20:30",
     "subj": "刑法",
-    "task": "刑法：简答 2 道（各 12 分钟）+ 法条分析 1 道 + 案例分析 1 道，手写"
+    "task": "刑法：简答 2 道（各 12 分钟）+ 法条分析 1 道 + 案例分析 1 道，手写（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "20:45-21:35",
     "subj": "民法",
-    "task": "民法：简答 2 道 + 法条分析 1 道 + 案例分析 1 道，手写"
+    "task": "民法：简答 2 道 + 法条分析 1 道 + 案例分析 1 道，手写（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "21:45-22:30",
@@ -2623,17 +2552,17 @@ const PLAN=[
    {
     "t": "19:30-20:30",
     "subj": "法理学",
-    "task": "法理学：简答 3 道 + 论述 1 道（法治、法与社会方向优先）"
+    "task": "法理学：简答 3 道 + 论述 1 道（法治、法与社会方向优先）（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "20:45-21:35",
     "subj": "宪法学",
-    "task": "宪法学：简答 3 道 + 宪法条文原文默写（第 1-32 条）"
+    "task": "宪法学：简答 3 道 + 宪法条文原文默写（第 1-32 条）（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "21:45-22:30",
     "subj": "法制史",
-    "task": "法制史：简答 3 道 + 把 A4 口诀纸通读一遍"
+    "task": "法制史：简答 3 道 + 把 A4 口诀纸通读一遍（题源：《真题解读》主观题 + 《写作一本通》范例）"
    },
    {
     "t": "22:30-22:50",
@@ -2682,7 +2611,7 @@ const PLAN=[
    {
     "t": "21:45-22:30",
     "subj": "背诵",
-    "task": "《考试分析》划线考点五科各抽 3 个高频考点快速背一轮"
+    "task": "《背诵一本通》考点五科各抽 3 个高频考点快速背一轮"
    },
    {
     "t": "22:30-22:50",
@@ -2805,7 +2734,7 @@ const PLAN=[
    {
     "t": "08:30-11:30",
     "subj": "398",
-    "task": "2026 年真题全卷，掐 3 小时"
+    "task": "2026 年真题全卷，掐 3 小时（年份整卷需自备；没买就用众合《冲刺卷》第 3 套）"
    },
    {
     "t": "11:30-13:30",
@@ -2815,7 +2744,7 @@ const PLAN=[
    {
     "t": "14:00-17:00",
     "subj": "498",
-    "task": "2026 年真题全卷，掐 3 小时"
+    "task": "2026 年真题全卷，掐 3 小时（年份整卷需自备；没买就用众合《冲刺卷》第 3 套）"
    },
    {
     "t": "17:00-18:30",
@@ -2830,7 +2759,7 @@ const PLAN=[
    {
     "t": "21:15-22:00",
     "subj": "政治",
-    "task": "肖四大题背诵 30 分钟 + 法硕划线考点默写 15 分钟"
+    "task": "肖四大题背诵 30 分钟 + 《背诵一本通》考点默写 15 分钟"
    },
    {
     "t": "22:00-22:15",
@@ -2923,12 +2852,12 @@ const PLAN=[
    {
     "t": "19:30-20:30",
     "subj": "刑法",
-    "task": "刑法：《考试分析》划线考点标记考点全部合书默写一遍"
+    "task": "刑法：《背诵一本通》考点标记考点全部合书默写一遍"
    },
    {
     "t": "20:45-21:35",
     "subj": "民法",
-    "task": "民法：《考试分析》划线考点标记考点全部合书默写一遍"
+    "task": "民法：《背诵一本通》考点标记考点全部合书默写一遍"
    },
    {
     "t": "21:45-22:30",
@@ -3071,7 +3000,7 @@ const PLAN=[
    {
     "t": "19:30-21:00",
     "subj": "全科",
-    "task": "合上书默画五科完整目录与章节结构，写不出的用红笔标出"
+    "task": "合上书默画五科《精讲一本通》完整目录与章节结构（对照《考试分析》2027），写不出的用红笔标出"
    },
    {
     "t": "21:15-22:30",
@@ -3212,50 +3141,4 @@ const PLAN=[
    }
   ]
  }
-];
-const DBKEY="fashuo2027preview_f376397dd650ccfa4ae71501",READ="https://textdb.online/"+DBKEY,WRITE="https://api.textdb.online/update/",LS="fashuo2027_preview";
-let S=JSON.parse(localStorage.getItem(LS)||"null")||{v:2,days:{}};let dirty=localStorage.getItem(LS+"_dirty")==="1";let lastGet=0;
-const $=id=>document.getElementById(id);
-const pad=n=>String(n).padStart(2,"0");const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
-function todayIdx(){const t=todayStr();let i=PLAN.findIndex(p=>p.date===t);if(i<0)i=t<PLAN[0].date?0:PLAN.length-1;return i}
-let cur=todayIdx();
-const E0={c:[],score:0,note:"",ts:0};const D=n=>S.days[n]||E0;const W=n=>S.days[n]||(S.days[n]={c:[],score:0,note:"",ts:0});
-function touch(n){W(n).ts=Date.now();save()}
-function save(){localStorage.setItem(LS,JSON.stringify(S));dirty=true;localStorage.setItem(LS+"_dirty","1");stats();clearTimeout(save.t);save.t=setTimeout(sync,4000)}
-function merge(r){if(!r||!r.days)return;for(const k in r.days){const a=S.days[k],b=r.days[k];if(!a||(b.ts||0)>(a.ts||0))S.days[k]=b}localStorage.setItem(LS,JSON.stringify(S))}
-function status(t,c){const e=$("sync");e.textContent=t;e.className="sync "+(c||"")}
-let busy=false;const tf=(u,o={})=>fetch(u,{...o,signal:AbortSignal.timeout?AbortSignal.timeout(12000):undefined});
-async function sync(force){if(busy)return;busy=true;try{
- if(force||Date.now()-lastGet>300000){status("同步中…");const g=await tf(READ+"?t="+Date.now(),{cache:"no-store"});if(!g.ok)throw g.status;const txt=await g.text();if(txt.trim())merge(JSON.parse(txt));lastGet=Date.now()}
- if(dirty){status("上传中…");S.updated=new Date().toISOString();const p=await tf(WRITE,{method:"POST",body:new URLSearchParams({key:DBKEY,value:JSON.stringify(S)})});const j=await p.json();if(j.status!==1)throw (j.error||"写入失败");dirty=false;localStorage.setItem(LS+"_dirty","0")}
- status("☁️ 已同步 "+new Date().toLocaleTimeString("zh-CN",{hour12:false}),"ok");render()
-}catch(e){status(navigator.onLine?"⚠️ 云端暂不可用（"+e+"），已存本机，稍后自动重试":"📴 离线：已存本机，联网后自动同步","err")}busy=false}
-function derive(p,n){const c=D(n).c;return{done:p.blocks.filter((b,i)=>c[i]).map(b=>b.subj+"："+b.task),undone:p.blocks.filter((b,i)=>!c[i]).map(b=>b.subj+"："+b.task)}}
-function pct(p){const c=D(p.day).c;return p.blocks.length?p.blocks.filter((b,i)=>c[i]).length/p.blocks.length:0}
-function stats(){let tb=0,db=0,dd=0;PLAN.forEach(p=>{tb+=p.blocks.length;const c=D(p.day).c;db+=p.blocks.filter((b,i)=>c[i]).length;if(pct(p)===1||D(p.day).score)dd++});
- let st=0;for(let i=todayIdx();i>=0;i--){const p=PLAN[i];const ok=pct(p)>=.5||D(p.day).score;if(ok)st++;else if(i===todayIdx())continue;else break}
- $("stats").innerHTML=`<div class=stat><b>${dd}</b><span>已打卡天</span></div><div class=stat><b>${tb?Math.round(db/tb*100):0}%</b><span>总完成率</span></div><div class=stat><b>${st}</b><span>连续天数</span></div><div class=stat><b>${Math.max(0,PLAN.length-1-todayIdx())}</b><span>距考试</span></div>`}
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function render(){const p=PLAN[cur],d=D(p.day);$("sel").value=cur;
- const dv=derive(p,p.day);
- $("view").innerHTML=`<div class=day><div class=dh><span class=dnum style="background:${p.color}">第 ${p.day} 天</span><b>${p.date} ${p.week}</b><span class=small>${p.phase}${p.minutes?" · 约 "+Math.round(p.minutes/6)/10+" 小时":""}</span>${p.date===todayStr()?"<b style='color:var(--accent)'>· 今天</b>":""}</div>
- ${p.remind?`<div class=memo style="background:#fef2f2;border-color:#dc2626">${esc(p.remind)}</div>`:""}<div class=focus>${esc(p.focus)}</div><div class=memo>${esc(p.memo)}</div>
- ${p.blocks.map((b,i)=>`<label class="blk ${d.c[i]?"done":""}"><input type=checkbox data-i=${i} ${d.c[i]?"checked":""}><div><div class=tm>${b.t}<span class=sj>${esc(b.subj)}</span></div><div class=tx>${esc(b.task)}</div></div></label>`).join("")}
- <div class=ci><b>今日打卡</b><div class=small>自评分（1-10）</div><div class=scores>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-s=${n} class="${d.score==n?"on":""}">${n}</button>`).join("")}</div>
- <div class=small>卡点与调整</div><textarea id=note placeholder="今天卡在哪里？明天怎么调？">${esc(d.note||"")}</textarea>
- <p class=small>✅ 完成 ${dv.done.length} 项｜⬜ 未完成 ${dv.undone.length} 项（自动统计）</p></div></div>`;
- $("view").querySelectorAll("input[type=checkbox]").forEach(x=>x.onchange=()=>{W(p.day).c[x.dataset.i]=x.checked?1:0;touch(p.day);render()});
- $("view").querySelectorAll("[data-s]").forEach(x=>x.onclick=()=>{W(p.day).score=+x.dataset.s;touch(p.day);render()});
- $("note").oninput=e=>{W(p.day).note=e.target.value;W(p.day).ts=Date.now();localStorage.setItem(LS,JSON.stringify(S));clearTimeout(render.t);render.t=setTimeout(save,800)};stats()}
-function go(i){cur=Math.max(0,Math.min(PLAN.length-1,i));render();scrollTo(0,0)}
-$("sel").innerHTML=PLAN.map((p,i)=>`<option value=${i}>第${p.day}天 ${p.date.slice(5)} ${p.week} · ${esc(p.subj)}</option>`).join("");
-$("sel").onchange=e=>go(+e.target.value);$("prev").onclick=$("prev2").onclick=()=>go(cur-1);$("next").onclick=$("next2").onclick=()=>go(cur+1);$("tod").onclick=()=>go(todayIdx());
-function md(){const cell=s=>String(s).replace(/\|/g,"／").replace(/\n/g," ");let o="| 日期 | 第几天 | 自评分 | 完成项 | 未完成项 | 卡点与调整 |\n|---|---|---|---|---|---|\n";
- PLAN.forEach(p=>{const d=S.days[p.day];if(!d||!d.ts)return;const v=derive(p,p.day);o+=`| ${p.date} | ${p.day} | ${d.score||""} | ${cell(v.done.join("；"))} | ${cell(v.undone.join("；"))} | ${cell(d.note||"")} |\n`});return o}
-$("exJ").onclick=()=>{$("out").value=JSON.stringify(S,null,1);dl("fashuo-progress.json",$("out").value)};
-$("exM").onclick=()=>{$("out").value=md();dl("fashuo-progress.md",$("out").value)};
-function dl(n,t){try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download=n;a.click()}catch(e){}}
-$("im").onclick=()=>$("file").click();$("file").onchange=async e=>{try{const r=JSON.parse(await e.target.files[0].text());for(const k in r.days)r.days[k].ts=Math.max(r.days[k].ts||0,Date.now());merge(r);save();render();alert("导入成功")}catch(x){alert("文件格式不对")}};
-$("pull").onclick=()=>sync(true);addEventListener("online",sync);document.addEventListener("visibilitychange",()=>{if(!document.hidden)sync()});setInterval(()=>{if(dirty)sync()},60000);
-render();sync(true);
-</script></body></html>
+]
