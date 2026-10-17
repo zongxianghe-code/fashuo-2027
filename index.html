@@ -3142,23 +3142,23 @@ const PLAN=[
   ]
  }
 ];
-const BIN="dfceeba",KEY="184d5c03d6745b5513f7afceba0f2f1c",API="https://extendsclass.com/api/json-storage/bin/"+BIN,LS="fashuo2027_progress";
-let S=JSON.parse(localStorage.getItem(LS)||"null")||{v:2,days:{}};let dirty=localStorage.getItem(LS+"_dirty")==="1";
+const API="https://api.restful-api.dev/objects/ff808181a09d98f701a14a42a47800e1",LS="fashuo2027_progress";
+let S=JSON.parse(localStorage.getItem(LS)||"null")||{v:2,days:{}};let dirty=localStorage.getItem(LS+"_dirty")==="1";let lastGet=0;
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
 function todayIdx(){const t=todayStr();let i=PLAN.findIndex(p=>p.date===t);if(i<0)i=t<PLAN[0].date?0:PLAN.length-1;return i}
 let cur=todayIdx();
 const D=n=>S.days[n]||(S.days[n]={c:[],score:0,note:"",ts:0});
 function touch(n){D(n).ts=Date.now();save()}
-function save(){localStorage.setItem(LS,JSON.stringify(S));dirty=true;localStorage.setItem(LS+"_dirty","1");stats();clearTimeout(save.t);save.t=setTimeout(sync,1200)}
+function save(){localStorage.setItem(LS,JSON.stringify(S));dirty=true;localStorage.setItem(LS+"_dirty","1");stats();clearTimeout(save.t);save.t=setTimeout(sync,4000)}
 function merge(r){if(!r||!r.days)return;for(const k in r.days){const a=S.days[k],b=r.days[k];if(!a||(b.ts||0)>(a.ts||0))S.days[k]=b}localStorage.setItem(LS,JSON.stringify(S))}
 function status(t,c){const e=$("sync");e.textContent=t;e.className="sync "+(c||"")}
 let busy=false;
-async function sync(){if(busy)return;busy=true;try{status("同步中…");
- const g=await fetch(API,{cache:"no-store"});if(!g.ok)throw 0;merge(await g.json());
- if(dirty){S.updated=new Date().toISOString();const p=await fetch(API,{method:"PUT",headers:{"Content-Type":"application/json","Security-key":KEY},body:JSON.stringify(S)});const j=await p.json();if(j.status!==0)throw 0;dirty=false;localStorage.setItem(LS+"_dirty","0")}
+async function sync(force){if(busy)return;busy=true;try{
+ if(force||Date.now()-lastGet>300000){status("同步中…");const g=await fetch(API,{cache:"no-store"});if(!g.ok)throw g.status;merge((await g.json()).data);lastGet=Date.now()}
+ if(dirty){status("上传中…");S.updated=new Date().toISOString();const p=await fetch(API,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"fashuo2027",data:S})});if(!p.ok)throw p.status;dirty=false;localStorage.setItem(LS+"_dirty","0")}
  status("☁️ 已同步 "+new Date().toLocaleTimeString("zh-CN",{hour12:false}),"ok");render()
-}catch(e){status(navigator.onLine?"⚠️ 云端暂不可用，已存本机，稍后自动重试":"📴 离线：已存本机，联网后自动同步","err")}busy=false}
+}catch(e){status(navigator.onLine?"⚠️ 云端暂不可用（"+e+"），已存本机，稍后自动重试":"📴 离线：已存本机，联网后自动同步","err")}busy=false}
 function derive(p,n){const c=D(n).c;return{done:p.blocks.filter((b,i)=>c[i]).map(b=>b.subj+"："+b.task),undone:p.blocks.filter((b,i)=>!c[i]).map(b=>b.subj+"："+b.task)}}
 function pct(p){const c=D(p.day).c;return p.blocks.length?p.blocks.filter((b,i)=>c[i]).length/p.blocks.length:0}
 function stats(){let tb=0,db=0,dd=0;PLAN.forEach(p=>{tb+=p.blocks.length;const c=D(p.day).c;db+=p.blocks.filter((b,i)=>c[i]).length;if(pct(p)===1||D(p.day).score)dd++});
@@ -3185,6 +3185,6 @@ $("exJ").onclick=()=>{$("out").value=JSON.stringify(S,null,1);dl("fashuo-progres
 $("exM").onclick=()=>{$("out").value=md();dl("fashuo-progress.md",$("out").value)};
 function dl(n,t){try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download=n;a.click()}catch(e){}}
 $("im").onclick=()=>$("file").click();$("file").onchange=async e=>{try{const r=JSON.parse(await e.target.files[0].text());for(const k in r.days)r.days[k].ts=Math.max(r.days[k].ts||0,Date.now());merge(r);save();render();alert("导入成功")}catch(x){alert("文件格式不对")}};
-$("pull").onclick=sync;addEventListener("online",sync);document.addEventListener("visibilitychange",()=>{if(!document.hidden)sync()});setInterval(()=>{if(dirty)sync()},30000);
-render();sync();
+$("pull").onclick=()=>sync(true);addEventListener("online",sync);document.addEventListener("visibilitychange",()=>{if(!document.hidden)sync()});setInterval(()=>{if(dirty)sync()},60000);
+render();sync(true);
 </script></body></html>
